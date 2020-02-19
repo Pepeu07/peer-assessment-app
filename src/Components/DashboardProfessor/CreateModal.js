@@ -30,14 +30,15 @@ export default function FormDialog(props) {
           <TextField
             autoFocus
             margin="dense"
-            id="name"
+            id="assessmentName"
             label="Assesment Name"
             type="text"
             fullWidth
+            onChange={props.onChangeHandler}
           />
 
         <TextField
-            id="date"
+            id="assesmentDueDate"
             label="Due Date"
             type="date"
             // defaultValue="2017-05-24"
@@ -45,6 +46,7 @@ export default function FormDialog(props) {
             InputLabelProps={{
             shrink: true,
             }}
+            onChange={props.onChangeHandler}
         />
 
         </DialogContent>
@@ -52,7 +54,7 @@ export default function FormDialog(props) {
           <Button onClick={props.close} color="primary">
             Cancel
           </Button>
-          <Button onClick={props.submit} color="primary">
+          <Button onClick={props.submit} color="primary" disabled={props.assessmentDate!==null && props.assessmentName!==null?false:true}>
             Submit
           </Button>
         </DialogActions>

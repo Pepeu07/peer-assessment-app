@@ -8,7 +8,7 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-
+import Hidden from '@material-ui/core/Hidden';
 import StudyingStudent from '../../Assets/professorLogin.svg'
 
 function Copyright() {
@@ -60,11 +60,13 @@ export default function SignInSide(props) {
   return (
     <Grid container component="main" className={classes.root}>
       {/* <CssBaseline /> */}
-      <Grid item xs={false} sm={4} md={7}>
-        <img src={StudyingStudent} alt='studying' style={{width:'120vh'}}/>    
-          
-      </Grid>
-      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+      <Hidden smDown  >
+          <Grid item  md={7} >
+            <img src={StudyingStudent} alt='studying' style={{width:'120vh'}}/>    
+              
+          </Grid>
+      </Hidden>
+      <Grid item xs={12} sm={12} md={5} component={Paper} elevation={6} square>
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />

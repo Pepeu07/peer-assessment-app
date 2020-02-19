@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import Moment from 'moment'
 
 // HomePage
-import Assesments from '../Components/DashboardProfessor/AllAssesments'
+import Teams from '../Components/DashboardProfessor/Teams'
 import ToDOModal from '../Components/DashboardProfessor/ModalProfessor'
 import CreateModal from '../Components/DashboardProfessor/CreateModal'
 
@@ -19,44 +19,56 @@ import {Redirect} from 'react-router-dom'
 
 const toGrade=[
     {
-        name:'Pedro',
-        team:1,
+        name:'Ted Cruz',
+        team:'Nickelodeon Political Super Packs',
         overallGrade:3.5,
-        assessment:'Delivery 5 Assessments'
     },
     {
-        name:'John',
-        team:4,
+        name:'Bernie Sanders',
+        team:'Nickelodeon Political Super Packs',
         overallGrade:4.5,
-        assessment:'Delivery 5 Assessments'
     },
     {
-        name:'Adam',
-        team:2,
-        overallGrade:3.9,
-        assessment:'Delivery 5 Assessments'
+        name:'Drake Bell',
+        team:'Nickelodeon Political Super Packs',
+        overallGrade:4.9,
+    },
+    {
+        name:'Mr.Clean',
+        team:'🥔🥔',
+        overallGrade:3.5,
+    },
+    {
+        name:'Geico Lizzard',
+        team:'🥔🥔',
+        overallGrade:4.0,
+    },
+    {
+        name:'Baby Yoda',
+        team:'🥔🥔',
+        overallGrade:4.8,
     }
 ]
 
-const allAssesments=[
+const AllTeams=[
     {
-        name:'Delivery 1 Assessments',
-        dueDate:  Moment(new Date()).subtract(30, 'days').calendar(),
+        name:'Nickelodeon Political Superpacks',
+        members:['Ted Cruz', 'Bernie Sanders', 'Drake Bell'],
         overAll: 4.3,
     },
     {
-        name:'Delivery 2 Assessments',
-        dueDate:  Moment(new Date()).subtract(20, 'days').calendar(),
+        name:'🥔🥔',
+        members:['Mr.Clean', 'Baby Yoda', 'Geico Lizzard'],
         overAll: 4.2,
     },
     {
-        name:'Delivery 3 Assessments',
-        dueDate:  Moment(new Date()).subtract(15, 'days').calendar(),
+        name:'Never forget...',
+        members:['Peter Pan', 'Invador Z', 'Pinky and Brain'],
         overAll: 3.3,
     },
     {
-        name:'Delivery 4 Assessments',
-        dueDate:  Moment(new Date()).subtract(12, 'days').calendar(),
+        name:'Okuuurrr',
+        members:['Queen B', 'Niki Minaj', 'Cardi B'],
         overAll: 2.7,
     },
 ]
@@ -68,27 +80,23 @@ class StudentHome extends Component{
     state={
         openToDoModal:false,
         todoSelected:null,
-        toDoIndex:null,
         todoResponses:null,
         logout:false,
         createModal:false,
 
         assessmentName: null,
         assesmentDueDate:null,
-        notification:false,
-
-        toGrade:toGrade
+        notification:false
 
     }
 
 
     // *----------HANDLE MODAL METHODS------------------*
      openModalHandler = (e) => {
-
+         console.log(toGrade[e])
         this.setState({
             openToDoModal:true,
-            todoSelected:toGrade[e],
-            toDoIndex:e
+            todoSelected:toGrade[e]
 
         });
       };
@@ -117,7 +125,7 @@ class StudentHome extends Component{
 
     //  *------------Assesment Create Functions -------------*
     submitNewHandler=()=>{
-        allAssesments.push({
+        AllTeams.push({
             name:this.state.assessmentName,
             dueDate:this.state.assesmentDueDate,
             overAll:'0'
@@ -128,19 +136,6 @@ class StudentHome extends Component{
             assesmentDueDate:null,
             createModal:false,
             notification:true
-        })
-    }
-
-      //  *------------Submit ToDo Functions -------------*
-      submitToDoHandler=()=>{
-       toGrade.splice(this.state.toDoIndex,1)
-
-
-       this.setState({
-            openToDoModal:false,
-            createModal:false,
-            toDoIndex:null,
-            todoSelected:null
         })
     }
 
@@ -176,9 +171,9 @@ class StudentHome extends Component{
                 onLogout={this.onLogout}
 
             >
-                <Assesments
+                <Teams
                 toGrade={toGrade}
-                closedArr={allAssesments}
+                closedArr={AllTeams}
                 openModal={this.openModalHandler}
                 openCreate={this.openCreateModal}
                 />
@@ -187,7 +182,6 @@ class StudentHome extends Component{
                 close={this.handleClose}
                 open={this.state.openToDoModal}
                 info={this.state.todoSelected}
-                submit={this.submitToDoHandler}
             />
 
             <CreateModal 
