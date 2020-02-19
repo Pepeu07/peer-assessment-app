@@ -84,9 +84,15 @@ class StudentHome extends Component{
         logout:false,
         createModal:false,
 
-        assessmentName: null,
-        assesmentDueDate:null,
-        notification:false
+        studentName: null,
+        teamSelected:null,
+        notificationStudent:false,
+
+        teamName:null,
+        notificationTeam:false,
+        createModalTeam:false,
+
+        allStudent: toGrade
 
     }
 
@@ -104,7 +110,8 @@ class StudentHome extends Component{
     handleClose = () => {
         this.setState({
             openToDoModal:false,
-            createModal:false
+            createModal:false,
+            createModalTeam:false
         })
       };
 
@@ -115,27 +122,57 @@ class StudentHome extends Component{
        });
      };
 
+     openCreateModalTeam = () => {
+        this.setState({
+            createModalTeam:true,
+ 
+        });
+      };
+
 
     // *------------ HANDLE CHANGE TEXT ----------------*
     textHandler=e=>{
+        console.log(e)
         this.setState({
             [e.target.id]:e.target.value
         })
     }
 
-    //  *------------Assesment Create Functions -------------*
-    submitNewHandler=()=>{
-        AllTeams.push({
-            name:this.state.assessmentName,
-            dueDate:this.state.assesmentDueDate,
-            overAll:'0'
+    teamSelectHandler=e=>{
+
+        this.setState({
+            [e.target.name]:e.target.value
+        })
+    }
+
+    //  *------------ Create Functions -------------*
+    submitNewStudentHandler=()=>{
+        toGrade.push({
+            name:this.state.studentName,
+            team:this.state.teamSelected,
+            overallGrade:'0'
         })
 
         this.setState({
-            assessmentName:null,
-            assesmentDueDate:null,
+            allStudent:toGrade,
+            studentName:null,
+            teamSelected:null,
             createModal:false,
-            notification:true
+            notificationStudent:true
+        })
+    }
+
+    submitNewTeamHandler=()=>{
+        AllTeams.push({
+            name:this.state.teamName,
+            members:[],
+            overallGrade:'0'
+        })
+
+        this.setState({
+            teamName:null,
+            createModalTeam:false,
+            notificationTeam:true
         })
     }
 
@@ -146,9 +183,19 @@ class StudentHome extends Component{
         }
     
         this.setState({
-            notification:false
+            notificationStudent:false,
+            notificationTeam:false
         })
       };
+
+
+    // *------ DELETE STUDENT ---------*
+    studentDelete = index=>{
+        toGrade.splice(index,1)
+        this.setState({
+            allStudent:toGrade
+        })
+    }
 
 
 
@@ -172,30 +219,46 @@ class StudentHome extends Component{
 
             >
                 <Teams
-                toGrade={toGrade}
+                toGrade={this.state.allStudent}
                 closedArr={AllTeams}
-                openModal={this.openModalHandler}
+                openCreateModalTeam={this.openCreateModalTeam}
                 openCreate={this.openCreateModal}
+                studentDelete={this.studentDelete}
                 />
 
-            <ToDOModal 
-                close={this.handleClose}
-                open={this.state.openToDoModal}
-                info={this.state.todoSelected}
-            />
-
+            {/* Modal Student Create */}
             <CreateModal 
                 close={this.handleClose}
                 open={this.state.createModal}
                 onChangeHandler={this.textHandler}
-                assessmentName={this.state.assessmentName}
-                assessmentDate={this.state.assesmentDueDate}
-                submit={this.submitNewHandler}
+                studentName={this.state.studentName}
+                teamSelected={this.state.teamSelected}
+                submit={this.submitNewStudentHandler}
+                type='student'
+                teams={AllTeams}
+                teamSelectHandler={this.teamSelectHandler}
+            />
+
+            {/* Modal Team Create */}
+            <CreateModal 
+                close={this.handleClose}
+                open={this.state.createModalTeam}
+                onChangeHandler={this.textHandler}
+                teamName={this.state.teamName}
+                submit={this.submitNewTeamHandler}
+                type='team'
             />
 
             <SnackBar 
-                    message='Assesment Created'
-                    open={this.state.notification}
+                    message='Student Created'
+                    open={this.state.notificationStudent}
+                    handleClose={this.handleCloseNot}
+                
+                />
+
+             <SnackBar 
+                    message='Team Created'
+                    open={this.state.notificationTeam}
                     handleClose={this.handleCloseNot}
                 
                 />

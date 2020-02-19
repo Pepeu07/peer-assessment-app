@@ -88,7 +88,7 @@ const StudentHome = props=>{
         <Grid container spacing={6}>
 
             <Grid item sm={10} xs={10}>
-                <Typography variant="h4">
+                <Typography variant="h4" color='primary'>
                     To-Do 
                 </Typography>
             </Grid>
@@ -101,7 +101,7 @@ const StudentHome = props=>{
             </Grid>
 
             <Grid item sm={10} xs={10}>
-                <Typography variant="h4">
+                <Typography variant="h4" style={{color:'#FF5B5C'}}>
                     Missed
                 </Typography>
             </Grid>

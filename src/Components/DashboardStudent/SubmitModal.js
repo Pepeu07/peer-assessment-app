@@ -10,6 +10,8 @@ import Slider from '@material-ui/core/Slider';
 import Typography from '@material-ui/core/Typography';
 import Slide from '@material-ui/core/Slide';
 
+
+
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="left" ref={ref} {...props} />;
 });
@@ -54,7 +56,7 @@ export default function FormDialog(props) {
 
         <React.Fragment>
 
-        <Typography id="discrete-slider-custom" gutterBottom>
+        <Typography id="discrete-slider-custom" gutterBottom style={{paddingTop:20}}>
         <b> {e}'s</b> Score. (0=Lowest / 5=Best)
         </Typography>
       <Slider
@@ -66,6 +68,16 @@ export default function FormDialog(props) {
         min={0}
         max={5}
       />
+        <TextField
+            autoFocus
+            margin="dense"
+            id={`comment${e}`}
+            label={`Comment on ${e}`}
+            type="text"
+            fullWidth
+            onChange={props.onChangeHandler}
+          />
+
         </React.Fragment>
 
     ))
@@ -87,7 +99,7 @@ export default function FormDialog(props) {
           <Button onClick={props.close} color="primary">
             Cancel
           </Button>
-          <Button onClick={props.submit} color="primary">
+          <Button onClick={props.submit} color="primary" disabled>
             Submit
           </Button>
         </DialogActions>

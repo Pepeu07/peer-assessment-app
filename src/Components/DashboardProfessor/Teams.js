@@ -29,7 +29,7 @@ const StudentHome = props=>{
                         <Typography variant='h5' color='primary'> <b>{e.name}</b> </Typography>
                         <Typography variant='subtitle1'> <b>Team:</b> {e.team}</Typography>
                         <Typography variant='subtitle1'> <b>Overall Grade:</b> {e.overallGrade}/5 </Typography>
-                        <Button outlined color="primary"> Delete </Button>
+                        <Button outlined color="primary" onClick={()=>props.studentDelete(i)}> Delete </Button>
                     </CardContent>
                     
                 </Card>
@@ -89,7 +89,7 @@ const StudentHome = props=>{
                 </Grid>
                 <Grid item sm={1}>
 
-                    <Button variant='outlined' color='primary' onClick={props.openCreate}>
+                    <Button variant='outlined' color='primary' onClick={props.openCreateModalTeam}>
                         New Team
                     </Button>
                 </Grid>
@@ -117,7 +117,7 @@ const StudentHome = props=>{
             </Grid>
 
 
-            <Grid item container sm={12} xs={12} spacing={6} style={{display:'flex',justifyContent:'space-between'}}>
+            <Grid item container sm={12} xs={12} spacing={6} style={{display:'flex',justifyContent:'space-evenly'}}>
                 
                 {toDoArr}                
 

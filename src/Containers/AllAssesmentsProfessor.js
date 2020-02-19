@@ -197,6 +197,8 @@ class StudentHome extends Component{
                 assessmentName={this.state.assessmentName}
                 assessmentDate={this.state.assesmentDueDate}
                 submit={this.submitNewHandler}
+                type='assessment'
+
             />
 
             <SnackBar 
