@@ -97,7 +97,7 @@ class Login extends Component{
         e.stopPropagation();
         if(this.state.typeSelected==='Student'){
             // *----------- CHANGE WITH DJANGO SERVER ---------------*
-            if(studentCredentials.username!== this.state.studentEmail || studentCredentials.pass!==this.state.studentPassword){
+            if(studentCredentials.username!== this.state.studentEmail.toLowerCase() || studentCredentials.pass!==this.state.studentPassword){
                 this.setState({
                     wrongCredentials:true
                 })
@@ -115,7 +115,7 @@ class Login extends Component{
 
         if(this.state.typeSelected==='Professor'){
             // *----------- CHANGE WITH DJANGO SERVER ---------------*
-            if(professorCredentials.username!== this.state.professorEmail || professorCredentials.pass!==this.state.professorPassword){
+            if(professorCredentials.username !== this.state.professorEmail.toLowerCase() || professorCredentials.pass!==this.state.professorPassword){
                 this.setState({
                     wrongCredentials:true
                 })
