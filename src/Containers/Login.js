@@ -11,6 +11,7 @@ import SnackBar from '../Components/Login/SnackBar'
 // import router redirect
 
 import {withRouter,Redirect} from 'react-router-dom'
+import Axios from 'axios'
 
 
 // *----------------DUMMY DATA ------------------*
@@ -97,36 +98,56 @@ class Login extends Component{
         e.stopPropagation();
         if(this.state.typeSelected==='Student'){
             // *----------- CHANGE WITH DJANGO SERVER ---------------*
-            if(studentCredentials.username!== this.state.studentEmail.toLowerCase() || studentCredentials.pass!==this.state.studentPassword){
-                this.setState({
-                    wrongCredentials:true
-                })
-            }
-            else{
-                // *--------- ADD TOKEN ----------------*
-                // localStorage.setItem('token',login.data.token)
-                localStorage.setItem('userType','Student')
-                this.setState({
-                    studentRedirect:true
-                })
-            }
+
+            let login = await Axios.get('https://smileyfacebc.herokuapp.com/user_auth/',{
+                username:this.state.studentEmail.toLowerCase().trim(),
+                password:this.state.studentPassword
+            })
+            console.log(login)
+            // localStorage.setItem('userType','Professor')
+            //     this.setState({
+            //         professorRedirect:true
+            //     })
+            // if(studentCredentials.username!== this.state.studentEmail.toLowerCase() || studentCredentials.pass!==this.state.studentPassword){
+            //     this.setState({
+            //         wrongCredentials:true
+            //     })
+            // }
+            // else{
+            //     // *--------- ADD TOKEN ----------------*
+            //     // localStorage.setItem('token',login.data.token)
+            //     localStorage.setItem('userType','Student')
+            //     this.setState({
+            //         studentRedirect:true
+            //     })
+            // }
 
         }
 
         if(this.state.typeSelected==='Professor'){
             // *----------- CHANGE WITH DJANGO SERVER ---------------*
-            if(professorCredentials.username !== this.state.professorEmail.toLowerCase() || professorCredentials.pass!==this.state.professorPassword){
-                this.setState({
-                    wrongCredentials:true
-                })
-            }
-            else{
-                localStorage.setItem('userType','Professor')
+
+            let login = await Axios.post('https://rsnce.com/api/token-auth/',{
+                username:this.state.professorEmail.toLowerCase().trim(),
+                password:this.state.professorPassword
+            })
+            localStorage.setItem('userType','Professor')
                 this.setState({
                     professorRedirect:true
                 })
+            // console.log(login)
+            // if(professorCredentials.username !== this.state.professorEmail.toLowerCase() || professorCredentials.pass!==this.state.professorPassword){
+            //     this.setState({
+            //         wrongCredentials:true
+            //     })
+            // }
+            // else{
+            //     localStorage.setItem('userType','Professor')
+            //     this.setState({
+            //         professorRedirect:true
+            //     })
 
-            }
+            // }
 
         }
 
