@@ -76,7 +76,7 @@ export default function SignInSide(props) {
           <Typography component="h1" variant="h5">
             Student Login
           </Typography>
-          <form className={classes.form} noValidate onSubmit={props.loginHandler}>
+          {/* <form className={classes.form} noValidate onSubmit={props.loginHandler}> */}
             <TextField
               variant="outlined"
               margin="normal"
@@ -101,6 +101,16 @@ export default function SignInSide(props) {
               autoComplete="current-password"
               onChange={props.textHandler}
             />
+
+            <Button
+              type="submit"
+              fullWidth
+              color="primary"
+              className={classes.back}
+              onClick={props.createModal}
+            >
+              Create an Account
+            </Button>
             <Button
               type="submit"
               fullWidth
@@ -123,11 +133,21 @@ export default function SignInSide(props) {
             >
               Back
             </Button>
+
+            <Button
+              type="submit"
+              fullWidth
+              color="primary"
+              className={classes.back}
+              onClick={props.handleForgotPassOpen}
+            >
+              Forgot Password
+            </Button>
             
             <Box mt={5}>
                 {Copyright}
             </Box>
-          </form>
+          {/* </form> */}
         </div>
       </Grid>
     </Grid>

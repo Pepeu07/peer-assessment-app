@@ -4,6 +4,10 @@ import Container from '@material-ui/core/Container'
 import FirstPage from '../Components/Login/1stPage'
 import StudentLogin from '../Components/Login/StudentLogin'
 import ProfessorLogin from '../Components/Login/ProfessorLogin'
+import DialogCreate from '../Components/Login/CreateModal'
+import Dialogforgot from '../Components/Login/ForgotPasswordModal'
+
+
 
 // Import Custom Components
 import SnackBar from '../Components/Login/SnackBar'
@@ -42,7 +46,25 @@ class Login extends Component{
         wrongCredentials: false,
 
         professorRedirect:false,
-        studentRedirect:false
+        studentRedirect:false,
+
+
+        openCreate:false,
+        emailCreate:'',
+        passwordCreate1:'',
+        passwordCreate2:'',
+        schoolIdCreate:'',
+        firstName:'',
+        lastName:'',
+        errorCreate:false,
+        createNotification:false,
+
+
+        forgotPass:false,
+        changePassError:false,
+        token:'',
+        forgotPassNotification:false,
+        forgotPassError2:false
 
 
     }
@@ -91,6 +113,14 @@ class Login extends Component{
         })
     }
 
+    // ----------------- HANDLE OPEN---------------
+    openModalhandler=()=>{
+        let opened= this.state.openCreate
+        this.setState({
+            openCreate:!opened
+        })
+    }
+
 
     // *------------- LOGIN -----------------*
     loginHandler= async e=>{
@@ -99,8 +129,8 @@ class Login extends Component{
         if(this.state.typeSelected==='Student'){
             // *----------- CHANGE WITH DJANGO SERVER ---------------*
 
-            let login = await Axios.get('https://smileyfacebc.herokuapp.com/user_auth/',{
-                username:this.state.studentEmail.toLowerCase().trim(),
+            let login = await Axios.post('https://peer-assingment-sever.herokuapp.com/api/auth/loginStudent',{
+                email:this.state.studentEmail.toLowerCase().trim(),
                 password:this.state.studentPassword
             })
             console.log(login)
@@ -108,19 +138,19 @@ class Login extends Component{
             //     this.setState({
             //         professorRedirect:true
             //     })
-            // if(studentCredentials.username!== this.state.studentEmail.toLowerCase() || studentCredentials.pass!==this.state.studentPassword){
-            //     this.setState({
-            //         wrongCredentials:true
-            //     })
-            // }
-            // else{
-            //     // *--------- ADD TOKEN ----------------*
-            //     // localStorage.setItem('token',login.data.token)
-            //     localStorage.setItem('userType','Student')
-            //     this.setState({
-            //         studentRedirect:true
-            //     })
-            // }
+            if(login.data===false){
+                this.setState({
+                    wrongCredentials:true
+                })
+            }
+            else{
+                // *--------- ADD TOKEN ----------------*
+                localStorage.setItem('token',login.data._id)
+                localStorage.setItem('userType','Student')
+                this.setState({
+                    studentRedirect:true
+                })
+            }
 
         }
 
@@ -128,7 +158,7 @@ class Login extends Component{
             // *----------- CHANGE WITH DJANGO SERVER ---------------*
 
             let login = await Axios.post('https://rsnce.com/api/token-auth/',{
-                username:this.state.professorEmail.toLowerCase().trim(),
+                email:this.state.professorEmail.toLowerCase().trim(),
                 password:this.state.professorPassword
             })
             localStorage.setItem('userType','Professor')
@@ -154,6 +184,49 @@ class Login extends Component{
     }
 
 
+    // *---------------------- Handle create ----------------------
+    createHandler=async ()=>{
+        let firstName=this.state.firstName
+        let lastName=this.state.lastName
+        let email=this.state.emailCreate
+        let password1=this.state.passwordCreate1
+        let password2=this.state.passwordCreate2
+        let studentId=this.state.schoolIdCreate
+
+        if(firstName.trim()==='' || lastName.trim()===''||email.trim()===''|| password1!==password2|| studentId.trim()===''){
+            this.setState({
+                errorCreate:true
+            })
+            return
+        }
+
+       let created = await Axios.post('https://peer-assingment-sever.herokuapp.com/api/create/createStudent',{
+           firstName,
+           lastName,
+           email,
+           password:password1,
+           studentId
+       })
+
+       console.log(created)
+
+       if(created.data===false){
+            this.setState({
+                errorCreate:true
+            })
+            return
+       }
+       else{
+            this.setState({
+                openCreate:false,
+                createNotification:true
+            })
+            return
+       }
+
+    }
+
+
 
     //  *------------ CLOSE NOTIFICATION ----------------*
      handleClose = (event, reason) => {
@@ -162,9 +235,59 @@ class Login extends Component{
         }
     
         this.setState({
-            wrongCredentials:false
+            wrongCredentials:false,
+            createNotification:false,
+            forgotPass:false,
+            forgotPassNotification:false
         })
       };
+
+
+
+    //   --------------------- forgot password-------------
+      handleForgotPassOpen=()=>{
+          this.setState({
+              forgotPass:true
+          })
+      }
+
+    // ------------------- send token ------------
+    handleSendToken=async()=>{
+        let tokenSent= await Axios.post('https://peer-assingment-sever.herokuapp.com/api/auth/sendToken',{
+            email:this.state.emailCreate
+        })
+        console.log(tokenSent)
+        if(tokenSent.data===false){
+            this.setState({
+                changePassError:true
+            })
+            return;
+        }
+    }
+
+    // -------------- handle change password --------------
+    handleForgotPass=async ()=>{
+        if(this.state.passwordCreate1!==this.state.passwordCreate2){
+            alert('password do not match')
+            return;
+        }
+
+        let changed = await Axios.post('https://peer-assingment-sever.herokuapp.com/api/auth/changePassword',{
+            token:this.state.token,
+            password:this.state.passwordCreate1,
+            email:this.state.emailCreate
+        })
+
+        if(changed.data===true){
+            this.setState({
+                forgotPass:false,
+                forgotPassNotification:true
+            })
+        }else{
+            alert('Please double check your information and your token')
+        }
+
+    }
 
 
 
@@ -188,6 +311,8 @@ class Login extends Component{
                     loginHandler={this.loginHandler}
                     pass={this.state.studentPassword}
                     email={this.state.studentEmail}
+                    createModal={this.openModalhandler}
+                    handleForgotPassOpen={this.handleForgotPassOpen}
                 />
             )
         }
@@ -213,9 +338,39 @@ class Login extends Component{
 
 
 
+                <DialogCreate
+                    handleClose={this.openModalhandler}
+                    open={this.state.openCreate}
+                    textHandler={this.textHandler}
+                    errorCreate={this.errorCreate}
+                    createHandler={this.createHandler}
+                />
+
+                <Dialogforgot 
+                    open={this.state.forgotPass}
+                    handleClose={this.handleClose}
+                    textHandler={this.textHandler}
+                    handleSendToken={this.handleSendToken}
+                    changePassError={this.state.changePassError}
+                    handleForgotPass={this.handleForgotPass}
+                    forgotPassError2={this.forgotPassError2}
+                />
+            
                 <SnackBar 
                     message='Wrong Credentials'
                     open={this.state.wrongCredentials}
+                    handleClose={this.handleClose}
+                
+                />
+                <SnackBar 
+                    message='Account Created'
+                    open={this.state.createNotification}
+                    handleClose={this.handleClose}
+                
+                />
+                 <SnackBar 
+                    message='Password Changed'
+                    open={this.state.forgotPassNotification}
                     handleClose={this.handleClose}
                 
                 />

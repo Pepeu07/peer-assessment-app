@@ -17,20 +17,6 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Home" />
     </ListItem>
-
-    <ListItem button component={Link} to={'/studentHome/assessments'}>
-      <ListItemIcon>
-        <BarChartIcon />
-      </ListItemIcon>
-      <ListItemText primary="Peer Assessments" />
-    </ListItem>
-
-    <ListItem button component={Link} to={'/studentHome/completed'}>
-      <ListItemIcon>
-        <LayersIcon />
-      </ListItemIcon>
-      <ListItemText primary="Completed" />
-    </ListItem>
   </div>
 );
 
@@ -41,20 +27,6 @@ export const secondaryListItems = (
         <DashboardIcon />
       </ListItemIcon>
       <ListItemText primary="Home" />
-    </ListItem>
-
-    <ListItem button component={Link} to={'/professorHome/assessments'}>
-      <ListItemIcon>
-        <BarChartIcon />
-      </ListItemIcon>
-      <ListItemText primary="All Assessments" />
-    </ListItem>
-
-    <ListItem button component={Link} to={'/professorHome/teams'}>
-      <ListItemIcon>
-        <PeopleIcon/>
-      </ListItemIcon>
-      <ListItemText primary="Teams & Students" />
     </ListItem>
 
     

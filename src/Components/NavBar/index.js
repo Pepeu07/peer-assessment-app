@@ -12,12 +12,12 @@ import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import Badge from '@material-ui/core/Badge';
 import Container from '@material-ui/core/Container';
-import Link from '@material-ui/core/Link';
+
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 
 import { mainListItems, secondaryListItems } from './listItems';
-import {Redirect} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 
 
 import Button from '@material-ui/core/Button'
@@ -116,7 +116,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function Dashboard(props) {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -142,6 +142,9 @@ export default function Dashboard(props) {
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
             {/* Dashboard */}
           </Typography>
+          {/* <Button color='primary' variant='text' component={Link} to='/profile'>
+              Profile
+          </Button> */}
           <Button color='primary' variant='outlined' onClick={props.onLogout}>
               Logout
           </Button>

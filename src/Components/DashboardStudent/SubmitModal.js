@@ -6,8 +6,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import Slider from '@material-ui/core/Slider';
-import Typography from '@material-ui/core/Typography';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import Slide from '@material-ui/core/Slide';
 
 
@@ -17,72 +17,71 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 
-const marks = [
-    {
-      value: 0,
-      label: '0',
-    },
-    {
-      value: 1,
-      label: '1',
-    },
-    {
-      value: 2,
-      label: '2',
-    },
-    {
-      value: 3,
-      label: '3',
-    },
-    {
-        value: 4,
-        label: '4',
-    },
-    {
-        value: 5,
-        label: '5',
-    },
-  ];
-
-  function valuetext(value) {
-    return `${value}`;
-  }
-
 export default function FormDialog(props) {
-    
+    console.log(props.info)
   let teamMatesForm;
-  if(props.info !==null && props.info.teamMates.length>0){
-    teamMatesForm= props.info.teamMates.map(e=>(
 
-        <React.Fragment>
-
-        <Typography id="discrete-slider-custom" gutterBottom style={{paddingTop:20}}>
-        <b> {e}'s</b> Score. (0=Lowest / 5=Best)
-        </Typography>
-      <Slider
-        defaultValue={0}
-        getAriaValueText={valuetext}
-        valueLabelDisplay="auto"
-        step={1}
-        marks={marks}
-        min={0}
-        max={5}
-      />
+  teamMatesForm= props.info.questions.map((q,i)=>{
+    let question
+    if(q.qtype==='Text'){
+      question=(
         <TextField
-            autoFocus
-            margin="dense"
-            id={`comment${e}`}
-            label={`Comment on ${e}`}
-            type="text"
-            fullWidth
-            onChange={props.onChangeHandler}
-          />
+          autoFocus
+          margin="dense"
+          id={q._id}
+          label={`${q.name}`}
+          type="text"
+          fullWidth
+          onChange={(e)=>props.onChangeHandler(e.target.value,i)}
+        />
+      )
+    }
+    if(q.qtype==='Multiple'){
+      question=(
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          // value={age}
+          onChange={(e)=>props.onChangeHandler(e.target.value,i)}
+        >
+          {q.options.map((val,i)=><MenuItem value={val} key={i}>{val}</MenuItem>)}
 
-        </React.Fragment>
+        </Select>
+      )
+    }
 
-    ))
+    return(
+      <React.Fragment key={q._id}>
+        {question}
+      </React.Fragment>
+    )
 
-  }
+  })
+
+  // if(props.info !==null && props.info.teamMates.length>0){
+  //   teamMatesForm= props.info.teamMates.map(e=>(
+
+  //       <React.Fragment>
+
+  //       <Typography id="discrete-slider-custom" gutterBottom style={{paddingTop:20}}>
+  //       <b> {e}'s</b> Score. (0=Lowest / 5=Best)
+  //       </Typography>
+   
+  //       <TextField
+  //           autoFocus
+  //           margin="dense"
+  //           id={`comment${e}`}
+  //           label={`Comment on ${e}`}
+  //           type="text"
+  //           fullWidth
+  //           onChange={props.onChangeHandler}
+  //         />
+
+  //       </React.Fragment>
+
+  //   ))
+
+  // }
 
   return (
     <div>
@@ -90,7 +89,7 @@ export default function FormDialog(props) {
         <DialogTitle id="form-dialog-title">{props.info?props.info.name:null}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Please fill out the peer assesment for each of your teammates
+            Please fill out the peer assesment...
           </DialogContentText>
          {teamMatesForm}
 
@@ -99,7 +98,7 @@ export default function FormDialog(props) {
           <Button onClick={props.close} color="primary">
             Cancel
           </Button>
-          <Button onClick={props.submit} color="primary" disabled>
+          <Button onClick={props.submit} color="primary" >
             Submit
           </Button>
         </DialogActions>
